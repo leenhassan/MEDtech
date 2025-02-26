@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}MEDTech Future{% endblock %}</title>
+    <link rel="stylesheet" href="/static/css/page.css">
+    <style>
+        /* Navigation Menu Styling */
+        nav {
+            background-color: #6f42c1;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <img src="/static/images/heartbeat.png" alt="Heartbeat" style="height: 30px; vertical-align: middle;">
+        <span style="font-size: 24px; font-weight: bold; margin-left: 10px;">MEDTech Future</span>
+    </header>
+
+    <!-- Navigation Menu -->
+    {% if not exclude_nav %}
+    <nav>
+        {% if not session.get('logged_in') %}
+            {% if request.path == '/' %}
+                <a href="/">Home</a>
+                <a href="/about">About Us</a>
+                <a href="/login">Login</a>
+                <a href="/register">Register</a>
+            {% elif request.path == '/login' %}
+                <a href="/">Home</a>
+                <a href="/about">About Us</a>
+                <a href="/login">Login</a>
+                <a href="/register">Register</a>
+            {% elif request.path == '/register' %}
+                <a href="/">Home</a>
+                <a href="/about">About Us</a>
+                <a href="/login">Login</a>
+                <a href="/register">Register</a>
+            {% elif request.path == '/about' %}
+                <a href="/">Home</a>
+                <a href="/about">About Us</a>
+                <a href="/login">Login</a>
+                <a href="/register">Register</a>
+            {% endif %}
+        {% else %}
+            {% if request.path.startswith('/dashboard') or request.path.startswith('/schedule') or request.path.startswith('/game') or request.path.startswith('/profile') or request.path.startswith('/contact') %}
+                <a href="/dashboard">Dashboard</a>
+                <a href="/schedule">Schedule</a>
+                <a href="/game">CPR Game</a>
+                <a href="/profile">Profile</a>
+                <a href="/contact">Contact Us</a>
+                <a href="/logout">Logout</a>
+            {% endif %}
+        {% endif %}
+    </nav>
+    {% endif %}
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer Section -->
+    <footer style="text-align: center; margin-top: 20px; padding: 10px; font-size: 12px; color: #aaa;">
+        &copy; 2025 MEDTech Future. All rights reserved.
+    </footer>
+</body>
+</html>

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<h1>Patient Profile</h1>
+
+{% if patient %}
+    <div>
+        <p><strong>First Name:</strong> {{ patient.first_name }}</p>
+        <p><strong>Last Name:</strong> {{ patient.last_name }}</p>
+        <p><strong>Age:</strong> {{ patient.age }}</p>
+        <p><strong>Weight:</strong> {{ patient.weight }} kg</p>
+        <p><strong>Height:</strong> {{ patient.height }} cm</p>
+        <p><strong>Email:</strong> {{ patient.email }}</p>
+        <p><strong>Doctor's Email:</strong> {{ patient.doctor_email }}</p>
+        <p><strong>Verified:</strong> {{ "Yes" if patient.verified else "No" }}</p>
+    </div>
+    <a href="/edit_profile" class="button">Edit Profile</a>
+{% else %}
+    <p>No patient data found.</p>
+{% endif %}
+{% endblock %}

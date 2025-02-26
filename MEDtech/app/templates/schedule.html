@@ -1,0 +1,210 @@
+{% extends "base.html" %}
+
+{% block title %}My Schedule{% endblock %}
+
+{% block content %}
+
+<h1 class="text-center">My Schedule</h1>
+<div class="calendar-controls text-center">
+    <button id="prev-month" class="btn btn-secondary">&lt; Previous</button>
+    <span id="current-month"></span>
+    <button id="next-month" class="btn btn-secondary">Next &gt;</button>
+</div>
+<div class="calendar" id="calendar">
+    <!-- Days of the week will be static -->
+    <div class="day-name">Monday</div>
+    <div class="day-name">Tuesday</div>
+    <div class="day-name">Wednesday</div>
+    <div class="day-name">Thursday</div>
+    <div class="day-name">Friday</div>
+    <div class="day-name">Saturday</div>
+    <div class="day-name">Sunday</div>
+    <!-- Days of the month will be populated dynamically -->
+</div>
+<a href="/profile" class="btn btn-primary mt-3">Back to Profile</a>
+
+<script>
+    const calendar = document.getElementById('calendar');
+    const currentMonth = document.getElementById('current-month');
+    const prevMonth = document.getElementById('prev-month');
+    const nextMonth = document.getElementById('next-month');
+
+    const today = new Date();
+    let currentYear = today.getFullYear();
+    let currentMonthIndex = today.getMonth();
+
+    const monthNames = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+    const dayNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+    async function fetchAppointments(year, month) {
+        const response = await fetch(`/appointments?year=${year}&month=${month + 1}`);
+        return response.json();
+    }
+
+    async function renderCalendar(year, month) {
+        calendar.innerHTML = '';
+        currentMonth.textContent = `${monthNames[month]} ${year}`;
+
+        const appointments = await fetchAppointments(year, month);
+
+        // Add day names
+        dayNames.forEach(day => {
+            const dayName = document.createElement('div');
+            dayName.className = 'day-name';
+            dayName.textContent = day;
+            calendar.appendChild(dayName);
+        });
+
+        const firstDay = new Date(year, month, 1).getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+        // Create blank days for the previous month
+        for (let i = 0; i < (firstDay === 0 ? 6 : firstDay - 1); i++) {
+            const emptyCell = document.createElement('div');
+            emptyCell.className = 'day empty';
+            calendar.appendChild(emptyCell);
+        }
+
+        // Create days for the current month
+        for (let day = 1; day <= daysInMonth; day++) {
+            const dayCell = document.createElement('div');
+            dayCell.className = 'day';
+            dayCell.innerHTML = `<span class="day-number">${day}</span><div class="appointment-container"></div>`;
+            calendar.appendChild(dayCell);
+
+            const appointment = appointments.find(a => a.day === day);
+            if (appointment) {
+                const appointmentDiv = document.createElement('div');
+                appointmentDiv.textContent = `${appointment.title} @ ${appointment.time}`;
+                appointmentDiv.className = 'appointment';
+                dayCell.querySelector('.appointment-container').appendChild(appointmentDiv);
+
+                // Edit functionality
+                appointmentDiv.addEventListener('click', async () => {
+                    const newTitle = prompt('Edit your appointment:', appointment.title);
+                    const newTime = prompt('Edit the time (HH:MM):', appointment.time);
+                    if (newTitle && newTime) {
+                        await fetch(`/edit_appointment/${appointment.id}`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ title: newTitle, time: newTime }),
+                        });
+                        renderCalendar(year, month);
+                    }
+                });
+            } else {
+                dayCell.addEventListener('click', async () => {
+                    const title = prompt(`Add an appointment for ${day} ${monthNames[month]} ${year}`);
+                    const time = prompt('Enter the time (HH:MM):');
+                    if (title && time) {
+                        await fetch('/add_appointment', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ day, month: month + 1, year, title, time }),
+                        });
+                        renderCalendar(year, month);
+                    }
+                });
+            }
+        }
+    }
+
+    prevMonth.addEventListener('click', () => {
+        currentMonthIndex--;
+        if (currentMonthIndex < 0) {
+            currentMonthIndex = 11;
+            currentYear--;
+        }
+        renderCalendar(currentYear, currentMonthIndex);
+    });
+
+    nextMonth.addEventListener('click', () => {
+        currentMonthIndex++;
+        if (currentMonthIndex > 11) {
+            currentMonthIndex = 0;
+            currentYear++;
+        }
+        renderCalendar(currentYear, currentMonthIndex);
+    });
+
+    renderCalendar(currentYear, currentMonthIndex);
+</script>
+
+<style>
+    .calendar {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 1px;
+        background-color: #ddd;
+        margin: 20px auto;
+        width: 80%;
+        border-radius: 8px;
+    }
+
+    .day-name {
+        background-color: #6f42c1;
+        color: white;
+        text-align: center;
+        padding: 10px;
+        font-weight: bold;
+    }
+
+    .calendar-controls {
+        display: flex;
+        justify-content: space-between;
+        margin: 10px auto;
+        width: 80%;
+    }
+
+    .calendar-controls button {
+        background-color: #6f42c1;
+        color: white;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .calendar-controls button:hover {
+        background-color: #563d7c;
+    }
+
+    .calendar .day {
+        background-color: #f5f5f5;
+        padding: 15px;
+        text-align: center;
+        border: 1px solid #ddd;
+        position: relative;
+    }
+
+    .calendar .day-number {
+        font-size: 14px;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .calendar .appointment-container {
+        font-size: 12px;
+        color: #6f42c1;
+        cursor: pointer;
+    }
+
+    .calendar .day.empty {
+        background-color: #e0e0e0;
+    }
+
+    .appointment {
+        background-color: #d9edf7;
+        padding: 5px;
+        border-radius: 4px;
+        margin-top: 5px;
+    }
+
+    .appointment:hover {
+        background-color: #c4e3f3;
+    }
+</style>
+{% endblock %}

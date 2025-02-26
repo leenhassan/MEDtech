@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heart Rate Dashboard</title>
+    <link rel="stylesheet" href="/static/css/page.css">
+    <style>
+        /* Navigation Menu Styling */
+        nav {
+            background-color: #6f42c1;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        /* BPM Trend Graph */
+        #bpm-trend {
+            display: block;
+            margin: 20px auto;
+            max-width: 90%;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        /* Cards for Updates */
+        .update-section {
+            margin-bottom: 30px;
+        }
+
+        .update-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #6f42c1;
+        }
+
+        .cards {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .card {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: #e8d5f7;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .card strong {
+            font-size: 22px;
+            color: #6f42c1;
+        }
+
+        .card span {
+            font-size: 12px;
+            color: #333;
+        }
+
+        /* Alerts Table */
+        .alerts-section {
+            margin-top: 30px;
+        }
+
+        .alerts-table {
+            margin: 0 auto;
+            width: 90%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        .alerts-table th,
+        .alerts-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+
+        .alerts-table th {
+            background-color: #6f42c1;
+            color: white;
+        }
+
+        .alerts-table td {
+            background-color: #f8f9fa;
+        }
+
+        .alerts-table td.warning {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .alerts-table td.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/schedule">Schedule</a>
+        <a href="/game">CPR Game</a>
+        <a href="/contact">Contact Us</a>
+        <a href="/profile">Profile</a>
+        <a href="/logout">Logout</a>
+    </nav>
+
+    <!-- Heart Rate Dashboard Content -->
+    <h1>Heart Rate Dashboard</h1>
+
+     <!-- BPM Trend Graph -->
+     <h2>BPM Trend</h2>
+     <img id="bpm-trend" src="{{ url_for('main.bpm_graph', patient_id=patient_id) }}" alt="BPM Trend Graph">
+
+
+    <!-- Start and Stop Recording Buttons -->
+    <div style="text-align: center; margin: 20px;">
+        <button id="start-recording" class="btn btn-primary">Start Recording</button>
+        <button id="stop-recording" class="btn btn-secondary">Stop Recording</button>
+    </div>
+
+    <!-- Alerts Section -->
+    <div class="alerts-section">
+        <h2>Alerts</h2>
+        <table class="alerts-table">
+            <thead>
+                <tr>
+                    <th>BPM</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for alert in alerts %}
+                <tr>
+                    <td class="warning">{{ alert.bpm }}</td>
+                    <td>{{ alert.timestamp.strftime('%Y-%m-%d') }}</td>
+                    <td>{{ alert.timestamp.strftime('%H:%M:%S') }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+    </table>
+    {% if not alerts %}
+        <p style="text-align: center; color: green;">No abnormal BPM records detected.</p>
+    {% endif %}
+</div>
+
+    <script>
+        document.getElementById('start-recording').addEventListener('click', () => {
+            fetch('/start_recording', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    alert('Recording started successfully!');
+                }
+            })
+            .catch(err => {
+                console.error('Error starting recording:', err);
+            });
+        });
+
+        document.getElementById('stop-recording').addEventListener('click', () => {
+            fetch('/stop_recording', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    alert('Recording stopped successfully!');
+                }
+            })
+            .catch(err => {
+                console.error('Error stopping recording:', err);
+            });
+        });
+    </script>
+
+    <!-- Footer Section -->
+    <footer style="text-align: center; margin-top: 20px; padding: 10px; font-size: 12px; color: #aaa;">
+        &copy; 2025 MEDTech Future. All rights reserved.
+    </footer>
+</body>
+</html>

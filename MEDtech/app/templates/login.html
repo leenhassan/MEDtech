@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div>
+            {% for category, message in messages %}
+                <p class="{{ category }}">{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endwith %}
+
+<h1>Log In</h1>
+<form method="POST" action="/login">
+    <!-- Email Field -->
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required><br>
+    
+    <!-- Password Field with Show Password Toggle -->
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required>
+    <input type="checkbox" id="show-password" onclick="togglePassword()"> Show Password<br>
+    
+    <!-- Submit Button -->
+    <button type="submit">Log In</button>
+</form>
+
+<script>
+    function togglePassword() {
+        const passwordField = document.getElementById('password');
+        const showPasswordCheckbox = document.getElementById('show-password');
+        if (showPasswordCheckbox.checked) {
+            passwordField.type = 'text';
+        } else {
+            passwordField.type = 'password';
+        }
+    }
+</script>
+{% endblock %}

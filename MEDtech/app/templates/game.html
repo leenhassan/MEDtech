@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}CPR Game{% endblock %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <title>CPR Game</title>
+</head>
+<body>
+    <div id="game-container">
+        <h1>Practice Your CPR</h1>
+        <div id="heart-area">
+            <div id="heart" onclick="checkTap()"></div>
+            <!-- Dots will dynamically spawn here -->
+        </div>
+        <div id="feedback">
+            <p id="amazing" style="display:none; color: green;">Amazing Pace!</p>
+            <p id="too-fast" style="display:none; color: red;">Too Fast!</p>
+            <p id="too-slow" style="display:none; color: yellow;">Too Slow!</p>
+            <p id="click-again" style="display:none; color: blue;">Click again to see pace!</p>
+        </div>
+        <p id="score">Score: 0</p>
+        <p id="high-score">High Score: 0</p>
+        <div id="song-selection">
+            <label for="songs">Select a Song:</label>
+            <select id="songs" onchange="changeSong()">
+                <option value="i_will_survive.mp3">I Will Survive</option>
+                <option value="stayin_alive.mp3">Stayin' Alive</option>
+                <option value="another_one_bites_the_dust.mp3">Another One Bites the Dust</option>
+            </select>
+        </div>
+        <div id="game-controls">
+            <button id="start-game" onclick="startGame()">Start Game</button>
+            <button id="stop-game" onclick="stopGame()">Stop Game</button>
+        </div>
+        <button onclick="toggleMusic()">Toggle Music</button>
+        <audio id="background-music" loop>
+            <source src="{{ url_for('static', filename='audio/i_will_survive.mp3') }}" type="audio/mpeg">
+        </audio>
+    </div>
+    <script src="{{ url_for('static', filename='js/game.js') }}"></script>
+</body>
+</html>
+{% endblock %}

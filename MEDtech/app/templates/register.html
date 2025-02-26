@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}Sign Up{% endblock %}
+
+{% block content %}
+<h1>Register</h1>
+<form method="POST" action="/register">
+    <!-- First Name -->
+    <label for="first_name">First Name:</label>
+    <input type="text" id="first_name" name="first_name" required><br>
+
+    <!-- Last Name -->
+    <label for="last_name">Last Name:</label>
+    <input type="text" id="last_name" name="last_name" required><br>
+
+    <!-- Age -->
+    <label for="age">Age:</label>
+    <input type="number" id="age" name="age" required><br>
+
+    <!-- Weight -->
+    <label for="weight">Weight (kg):</label>
+    <input type="number" step="0.1" id="weight" name="weight" required><br>
+
+    <!-- Height -->
+    <label for="height">Height (cm):</label>
+    <input type="number" step="0.1" id="height" name="height" required><br>
+
+    <!-- Email -->
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required><br>
+
+    <!-- Password -->
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" oninput="checkPasswordStrength()" required>
+    <div id="password-strength" style="margin-top: 5px; font-size: 0.9rem;"></div><br>
+
+    <!-- Doctor Email -->
+    <label for="doctor_email">Doctor's Email:</label>
+    <input type="email" id="doctor_email" name="doctor_email" required><br>
+
+    <!-- Submit Button -->
+    <button type="submit">Sign Up</button>
+</form>
+
+<script>
+    function checkPasswordStrength() {
+        const password = document.getElementById('password').value;
+        const strengthIndicator = document.getElementById('password-strength');
+        let strength = 0;
+
+        if (password.length >= 8) strength++; // Minimum 8 characters
+        if (/[A-Z]/.test(password)) strength++; // At least 1 uppercase letter
+        if (/[a-z]/.test(password)) strength++; // At least 1 lowercase letter
+        if (/\d/.test(password)) strength++; // At least 1 number
+        if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) strength++; // At least 1 special character
+
+        switch (strength) {
+            case 0:
+            case 1:
+                strengthIndicator.style.color = 'red';
+                strengthIndicator.textContent = 'Very Weak';
+                break;
+            case 2:
+                strengthIndicator.style.color = 'orange';
+                strengthIndicator.textContent = 'Weak';
+                break;
+            case 3:
+                strengthIndicator.style.color = 'yellow';
+                strengthIndicator.textContent = 'Moderate';
+                break;
+            case 4:
+                strengthIndicator.style.color = 'blue';
+                strengthIndicator.textContent = 'Strong';
+                break;
+            case 5:
+                strengthIndicator.style.color = 'green';
+                strengthIndicator.textContent = 'Very Strong';
+                break;
+            default:
+                strengthIndicator.textContent = '';
+        }
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}About Us{% endblock %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - MEDTech Future</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #6c63ff;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        p {
+            text-align: justify;
+            line-height: 1.6;
+        }
+        .btn {
+            display: block;
+            margin: 20px auto;
+            background-color: #6c63ff;
+            color: white;
+            border: none;
+            width: 200px;
+            text-align: center;
+        }
+        .btn:hover {
+            background-color: #594ebc;
+        }
+        nav {
+            background-color: #6f42c1;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+
+
+    <!-- About Us Content -->
+    <div class="container">
+        <h1>About Us</h1>
+        <p>
+            Welcome to <strong>MEDTech Future</strong>, your trusted partner in healthcare technology. Our mission is to leverage innovative solutions to monitor and improve health outcomes for patients worldwide. 
+            With a focus on providing reliable and accurate tools, MEDTech Future ensures that both healthcare providers and patients have the resources they need for seamless monitoring and care.
+        </p>
+        <p>
+            Our platform specializes in heart rate monitoring, enabling real-time data tracking and efficient communication between patients and their healthcare providers. 
+            With a commitment to safety and accuracy, we empower individuals to take control of their health while giving medical professionals the tools they need to deliver superior care.
+        </p>
+        <p>
+            Thank you for choosing MEDTech Future. Together, we aim to create a healthier and more connected future.
+        </p>
+        <a href="{{ url_for('main.home') }}" class="btn">Back to Home</a>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+{% endblock %}

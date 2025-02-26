@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Email Verification{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Email Verification</h1>
+    <p>We have sent a verification link to your email. Please check your inbox and click the link to verify your account.</p>
+    <p>Alternatively, you can verify your account by entering the verification code below:</p>
+    <form method="POST" action="/verification">
+        <div class="form-group">
+            <label for="code">Verification Code:</label>
+            <input type="text" class="form-control" id="code" name="code" required>
+        </div>
+        <button type="submit" class="btn btn-primary w-100 mt-3">Verify</button>
+    </form>
+    <a href="{{ url_for('main.home') }}" class="btn btn-secondary w-100 mt-3">Back to Home</a>
+</div>
+{% endblock %}

@@ -1,0 +1,14 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "database": "${workspaceFolder:MEDtech}/database.db",
+            "name": "MED"
+        }
+    ],
+    "sqltools.useNodeRuntime": true,
+    "python.analysis.extraPaths": [
+        "./app"
+    ]
+}
