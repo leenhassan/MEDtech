@@ -18,7 +18,7 @@ def create_app():
     app.config['SECRET_KEY'] = 'rainbow'
 
     # Database configuration
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:Khadija2005*@localhost/medtech_db'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:leen2004@localhost/medtech_db'
     #app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -26,8 +26,8 @@ def create_app():
     app.config['MAIL_SERVER'] = 'smtp.gmail.com'
     app.config['MAIL_PORT'] = 587
     app.config['MAIL_USE_TLS'] = True
-    app.config['MAIL_USERNAME'] = 'dija.aa1714@gmail.com'
-    app.config['MAIL_PASSWORD'] = 'rdfo zlhm aqeq ytmd'
+    app.config['MAIL_USERNAME'] = 'leenhassan31@gmail.com'
+    app.config['MAIL_PASSWORD'] = 'lamt frqy khqv azbw'
 
     # Initialize extensions
     db.init_app(app)
